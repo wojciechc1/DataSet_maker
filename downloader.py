@@ -41,7 +41,7 @@ def download_image(url, folder, count, timeout=5):
         return True
 
     except (RequestException, Timeout) as e:
-        logging.info(f"Cannot download image {count} ({url}): {e}")
+        logging.error(f"Cannot download image {count} ({url}): {e}")
         return False
 
 
@@ -56,7 +56,7 @@ def accept_cookies(driver):
         logging.info(f"Accepted cookies")
 
     except (TimeoutException, NoSuchElementException):
-        logging.info(f"Can't accept cookies")
+        logging.warning(f"Can't accept cookies")
         pass
 
 
@@ -137,10 +137,9 @@ def downloader(query, directory, num_images=5):
                 break
 
         except Exception as e:
-            logging.info(f"Error during clicking or downloading image. {e}")
-
-        logging.info(f"Finished. Downloaded {count} images")
+            logging.error(f"Error during clicking or downloading image. {e}")
 
         i += 1
+        logging.info(f"Finished. Downloaded {count} images")
 
     driver.quit()
