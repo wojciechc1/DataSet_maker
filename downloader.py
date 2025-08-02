@@ -11,6 +11,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from requests.exceptions import RequestException, Timeout
 
+import logging
+
+
+logging.basicConfig(
+    level=logging.INFO,  # lub DEBUG
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+
 
 def download_image(url, folder, count, timeout=5):
     headers = {
@@ -26,11 +37,11 @@ def download_image(url, folder, count, timeout=5):
         with open(os.path.join(folder, f'image_{count}.jpg'), 'wb') as f:
                 f.write(response.content)
 
-        print(f"Pobrano obraz {count}")
+        logging.info(f'Downloaded image {count} ({url})')
         return True
 
     except (RequestException, Timeout) as e:
-        print(f"Nie udało się pobrać obrazu {count} ({url}): {e}")
+        logging.info(f"Cannot download image {count} ({url}): {e}")
         return False
 
 
@@ -42,12 +53,14 @@ def accept_cookies(driver):
             By.XPATH, "//div[contains(@class, 'QS5gu') and contains(text(), 'Zaakceptuj wszystko')]"
         )))
         accept_button.click()
+        logging.info(f"Accepted cookies")
+
     except (TimeoutException, NoSuchElementException):
-        # jesli nie ma popupu, przejdź dalej
+        logging.info(f"Can't accept cookies")
         pass
 
 
-def scroll_to_load_thumbnails(driver, min_count=150, scroll_pause=1):
+def scroll_to_load_thumbnails(driver, wait, min_count=150, scroll_pause=1):
     last_height = driver.execute_script("return document.body.scrollHeight")
     thumbnails = []
 
@@ -56,7 +69,7 @@ def scroll_to_load_thumbnails(driver, min_count=150, scroll_pause=1):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(scroll_pause)
 
-        # Pobierz wszystkie miniatury
+        # download all thubnails
         new_thumbnails = driver.find_elements(By.CSS_SELECTOR, ".cC9Rib")
 
         if len(new_thumbnails) > len(thumbnails):
@@ -72,7 +85,7 @@ def scroll_to_load_thumbnails(driver, min_count=150, scroll_pause=1):
             break
         last_height = new_height
 
-    print(f"Zebrano {len(thumbnails)} miniatur.")
+    logging.info(f"Found {len(thumbnails)} thumbnails.")
     return thumbnails
 
 
@@ -92,27 +105,29 @@ def downloader(query, directory, num_images=5):
     search_box.send_keys(query)
     search_box.send_keys(Keys.RETURN)
 
-    time.sleep(0.1)  # poczekaj na załadowanie wyników
+    time.sleep(0.1)  # Poczekaj na załadowanie wyników
 
 
     # .cC9Rib img.sFlh5c
-    thumbnails = scroll_to_load_thumbnails(driver)
+    thumbnails = scroll_to_load_thumbnails(driver, wait)
 
-    # Klikaj po kolei miniaturki
+
+    # clicking thubnails
     i = 0
     count = 0
     while count < num_images and i < len(thumbnails):
         try:
             driver.execute_script("arguments[0].click();", thumbnails[i])
-            print(f"Kliknięto miniaturę {i+1}")
+            logging.info(f"Clicked thumbnail nr. {i+1}")
 
-
+            # big image
             large_image = wait.until(
-                EC.visibility_of_element_located((By.CSS_SELECTOR, "img.sFlh5c.FyHeAf.iPVvYb"))  # lub inna klasa dużego obrazka
+                EC.visibility_of_element_located((By.CSS_SELECTOR, "img.sFlh5c.FyHeAf.iPVvYb"))
             )
 
             src = large_image.get_attribute("src")
-            print(src)
+
+
             if src:
                 succes = download_image(src, folder, count)
                 count +=1 if succes else 0
@@ -122,7 +137,7 @@ def downloader(query, directory, num_images=5):
                 break
 
         except Exception as e:
-            print(f"Błąd kliknięcia miniatury {i} lub pobierania obrazu: {e}")
+            logging.info(f"Error during clicking or downloading image. {e}")
 
         i += 1
 
