@@ -1,0 +1,1 @@
+Simple Python script for downloading images from Google Images using Selenium. Useful for leveraging datasets for machine learning.
