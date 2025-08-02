@@ -139,6 +139,8 @@ def downloader(query, directory, num_images=5):
         except Exception as e:
             logging.info(f"Error during clicking or downloading image. {e}")
 
+        logging.info(f"Finished. Downloaded {count} images")
+
         i += 1
 
     driver.quit()
