@@ -61,7 +61,7 @@ cd DataSet_maker
 pip install -r requirements.txt
 ```
 
-3. Make sure you have Chrome installed, and optionally install chromedriver or use webdriver-manager
+3. Make sure you have Chrome installed, and optionally install `chromedriver` or use `webdriver-manager`
 
 ---
 
@@ -112,12 +112,12 @@ run_downloader(
 ```
 --- 
 ## Configuration Options:
-- queries: List of search queries.
-- base_directory: Base folder to save datasets.
-- folder_name: Name of the subfolder for current dataset.
-- num_images: Number of images per query.
-- headless: Boolean, whether to run Chrome in headless mode.
-- reset_folder: Boolean, whether to clear the folder before downloading.
+- `queries`: List of search queries.
+- `base_directory`: Base folder to save datasets.
+- `folder_name`: Name of the subfolder for current dataset.
+- `num_images`: Number of images per query.
+- `headless`: Boolean, whether to run Chrome in headless mode.
+- `reset_folder`: Boolean, whether to clear the folder before downloading.
 
 --- 
 ## Metadata
