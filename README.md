@@ -19,8 +19,8 @@ A Python project for downloading images from Google Images using Selenium. Suppo
 ## Project Structure
 ```bash
 project/
-│── main.py                # test
-│── config.py              # configuration (limits, pahts, selenium options itd.)
+│── main.py                # main downloading script (for CONFIG.py)
+│── config.py              # configuration (limits, queries, pahts itd..)
 │── requirements.txt
 │── LICENSE     
 │── README.md              
@@ -53,9 +53,9 @@ project/
 
 ```bash
 git clone https://github.com/wojciechc1/DataSet_maker
-cd Image_scraper_selenium
+cd DataSet_maker
 ```
-1. Clone the repository
+1. Install dependencies 
 
 ```bash
 pip install -r requirements.txt
