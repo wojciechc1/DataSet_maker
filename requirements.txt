@@ -1,0 +1,11 @@
+# Selenium for browser automation
+selenium>=5.7.2
+
+# Requests for downloading images
+requests>=2.32.0
+
+# For Chrome WebDriver management (optional but useful)
+webdriver-manager>=4.9.0
+
+# Time, Pathlib, Logging, JSON, OS – built in
+

@@ -1,6 +1,6 @@
 import os
 import requests
-from requests.exceptions import RequestException, Timeout
+from requests.exceptions import RequestException, Timeout, SSLError
 from utils.logger import setup_logger
 
 
@@ -25,6 +25,12 @@ def download_image(url, folder, count, timeout=5):
 
         logger.info(f'Downloaded image {count} ({url})')
         return True
-    except Exception as e:
+    except SSLError:
+        logger.warning(f"Skipping image {count} due to SSL error: {url}")
+        return False
+    except (RequestException, Timeout) as e:
         logger.error(f"Cannot download image {count} ({url})", exc_info=True)
+        return False
+    except Exception as e:  # other exceptions
+        logger.error(f"Unexpected error for image {count} ({url}): {e}", exc_info=True)
         return False
