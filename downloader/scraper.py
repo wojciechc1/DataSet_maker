@@ -1,10 +1,13 @@
 import time
-import logging
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from utils.logger import setup_logger
+
+
+logger = setup_logger(__name__)
 
 
 def accept_cookies(driver):
@@ -14,9 +17,9 @@ def accept_cookies(driver):
             By.XPATH, "//div[contains(@class, 'QS5gu') and contains(text(), 'Zaakceptuj wszystko')]"
         )))
         accept_button.click()
-        logging.info("Accepted cookies")
+        logger.info("Accepted cookies")
     except (TimeoutException, NoSuchElementException):
-        logging.warning("Can't accept cookies")
+        logger.warning("Can't accept cookies")
         pass
 
 
@@ -42,5 +45,5 @@ def scroll_to_load_thumbnails(driver, wait, min_count=150, scroll_pause=1):
             break
         last_height = new_height
 
-    logging.info(f"Found {len(thumbnails)} thumbnails.")
+    logger.info(f"Found {len(thumbnails)} thumbnails.")
     return thumbnails

@@ -1,6 +1,6 @@
-import os
 import time
-import logging
+from utils.logger import setup_logger
+from utils.file_utils import ensure_dir
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -10,9 +10,10 @@ from downloader.scraper import accept_cookies, scroll_to_load_thumbnails
 from downloader.downloader import download_image
 
 
+logger = setup_logger(__file__)
+
 def run_downloader(query, directory="downloads", num_images=5):
-    folder = directory
-    os.makedirs(folder, exist_ok=True)
+    folder = ensure_dir(directory)
 
     driver = get_driver(headless=False)
     driver.get("https://images.google.com")
@@ -31,7 +32,7 @@ def run_downloader(query, directory="downloads", num_images=5):
     while count < num_images and i < len(thumbnails):
         try:
             driver.execute_script("arguments[0].click();", thumbnails[i])
-            logging.info(f"Clicked thumbnail nr. {i+1}")
+            logger.info(f"Clicked thumbnail nr. {i+1}")
 
             large_image = wait.until(
                 EC.visibility_of_element_located((By.CSS_SELECTOR, "img.sFlh5c.FyHeAf.iPVvYb"))
@@ -46,13 +47,13 @@ def run_downloader(query, directory="downloads", num_images=5):
             time.sleep(0.2)
 
         except Exception as e:
-            logging.error(f"Error during clicking/downloading image: {e}")
+            logger.error(f"Error during clicking/downloading image: {e}")
 
         i += 1
 
-    logging.info(f"Finished. Downloaded {count} images")
+    logger.info(f"Finished. Downloaded {count} images")
     driver.quit()
 
 
 if __name__ == "__main__":
-    run_downloader("cats", "downloads", num_images=5)
+    run_downloader("cats", "downloads", num_images=25)

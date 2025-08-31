@@ -2,9 +2,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from utils.logger import setup_logger
 
+logger = setup_logger(__name__)
 
 def get_driver(headless=True):
+    logger.info("Starting Chrome WebDriver...")
     options = Options()
     if headless:
         options.add_argument("--headless=new")
@@ -19,6 +22,12 @@ def get_driver(headless=True):
         "Chrome/115.0.0.0 Safari/537.36"
     )
 
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=options)
-    return driver
+
+    try:
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=options)
+        logger.info("Chrome WebDriver started successfully")
+        return driver
+    except Exception as e:
+        logger.error(f"Failed to start Chrome WebDriver: {e}")
+        raise

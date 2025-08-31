@@ -13,7 +13,7 @@ from requests.exceptions import RequestException, Timeout
 
 import logging
 
-
+'''
 logging.basicConfig(
     level=logging.INFO,  # lub DEBUG
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -143,3 +143,4 @@ def downloader(query, directory, num_images=5):
         logging.info(f"Finished. Downloaded {count} images")
 
     driver.quit()
+'''
