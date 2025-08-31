@@ -21,7 +21,8 @@ A Python project for downloading images from Google Images using Selenium. Suppo
 project/
 │── main.py                # test
 │── config.py              # configuration (limits, pahts, selenium options itd.)
-│── requirements.txt       
+│── requirements.txt
+│── LICENSE     
 │── README.md              
 │
 ├── downloader/
@@ -51,7 +52,7 @@ project/
 1. Clone the repository:
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/wojciechc1/DataSet_maker
 cd Image_scraper_selenium
 ```
 1. Clone the repository
