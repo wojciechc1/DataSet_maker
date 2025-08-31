@@ -147,9 +147,3 @@ Each folder has a metadata.json file:
 - Support other image sources beyond Google Images.
 - Parallel downloading for faster scraping.
 - Command-line interface for easy usage
-
----
-
-## License
-
-MIT License – free to use and modify.
